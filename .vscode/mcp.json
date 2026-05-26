@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": ["-y", "shadcn@latest", "mcp"]
+    },
+    "chrome": {
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-chrome"]
+    }
+  }
+}
