@@ -16,7 +16,7 @@ export function HomePage() {
       <div className="space-y-1">
         <h2 className="text-2xl font-semibold">{t('public.home.heading')}</h2>
         <p className="text-muted-foreground">
-          {t('public.home.flowPrefix')} <code>GET /event-types</code> {t('public.home.flowAnd')} <code>GET /event-types/{'{eventTypeId}'}/slots</code>.
+          {t('public.home.flowPrefix')} <code>GET /event-types</code> {t('public.home.flowAnd')} <code>GET /slots</code>.
         </p>
       </div>
 

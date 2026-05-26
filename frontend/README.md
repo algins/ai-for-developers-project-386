@@ -35,14 +35,15 @@ cp .env.example .env.local
 Public:
 
 - `GET /event-types`
-- `GET /event-types/{eventTypeId}/slots`
+- `GET /slots`
 - `POST /bookings`
+
 
 Admin:
 
-- `GET /admin/owner`
-- `POST /admin/event-types`
-- `GET /admin/bookings/upcoming`
+- `GET /owner/profile`
+- `POST /event-types`
+- `GET /bookings`
 
 ## UI Stack
 

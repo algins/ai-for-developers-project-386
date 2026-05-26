@@ -17,7 +17,7 @@ function App() {
         <Route path="/event-types/:eventTypeId" element={<EventTypePage />} />
         <Route path="/booking/confirmation/:bookingId" element={<BookingConfirmationPage />} />
 
-        <Route path="/admin/owner" element={<AdminOwnerPage />} />
+        <Route path="/owner/profile" element={<AdminOwnerPage />} />
         <Route path="/admin/event-types" element={<AdminEventTypesPage />} />
         <Route path="/admin/bookings" element={<AdminBookingsPage />} />
 

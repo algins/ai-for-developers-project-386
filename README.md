@@ -8,6 +8,7 @@ This repository contains:
 - API contract in TypeSpec (`main.tsp`)
 - generated OpenAPI spec (`tsp-output/schema/openapi.yaml`)
 - separate frontend app (`frontend/`) built against the API contract
+- separate backend app (`backend/`) built with Spring Boot (in-memory storage)
 
 All common workflows are encapsulated in the root `Makefile`.
 
@@ -15,6 +16,8 @@ All common workflows are encapsulated in the root `Makefile`.
 
 - Node.js 22 LTS or newer
 - npm
+- Java 17+
+- Gradle 8+
 
 ## Quick Start
 
@@ -30,10 +33,16 @@ make setup
 make frontend-sync
 ```
 
-3. Start frontend with mock API (Prism + Vite):
+3. Start frontend (Vite):
 
 ```bash
 make frontend-start
+```
+
+Backend can be started separately:
+
+```bash
+make backend-start
 ```
 
 4. Open the app in browser:
@@ -55,7 +64,7 @@ make setup
 Compile TypeSpec once:
 
 ```bash
-make docs
+make api-docs
 ```
 
 Run both steps in one command:
@@ -66,15 +75,21 @@ make frontend-sync
 
 ### 3) Run the App
 
-Run frontend and Prism together:
+Run frontend without Prism:
 
 ```bash
 make frontend-start
 ```
 
+Run frontend with Prism mock:
+
+```bash
+make frontend-start-dev
+```
+
 ### 4) See Results in Browser
 
-When `make frontend-start` is running, open:
+When `make frontend-start` or `make frontend-start-dev` is running, open:
 
 - http://localhost:5173/
 
@@ -82,9 +97,14 @@ Main routes:
 
 - Public flow: `/`
 - Event booking page: `/event-types/:eventTypeId`
-- Admin owner: `/admin/owner`
+- Public slots API: `/slots`
+- Admin owner: `/owner/profile`
 - Admin event types: `/admin/event-types`
 - Admin bookings: `/admin/bookings`
+
+Backend API (when `make backend-start` is running):
+
+- http://localhost:4010
 
 ### 5) Make Changes
 
@@ -107,10 +127,18 @@ make frontend-start
 
 ### 6) Validate Before Commit
 
-Run frontend checks:
+Run frontend lint and typecheck:
 
 ```bash
-make frontend-check
+make frontend-lint
+make frontend-typecheck
+```
+
+Run backend lint and tests:
+
+```bash
+make backend-lint
+make backend-test
 ```
 
 ## Environment
@@ -125,10 +153,16 @@ Main variable:
 
 ## Useful Commands
 
-Show all available make targets:
+Install dependencies:
 
 ```bash
-make help
+make setup
+```
+
+Build all artifacts:
+
+```bash
+make build
 ```
 
 Generated OpenAPI files are written to `tsp-output/schema/`.

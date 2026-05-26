@@ -5,7 +5,7 @@ import type { CreateBookingRequest, CreateEventTypeRequest } from '@/types/api'
 
 export const queryKeys = {
   publicEventTypes: ['public', 'event-types'] as const,
-  publicSlots: (eventTypeId: string) => ['public', 'slots', eventTypeId] as const,
+  publicSlots: ['public', 'slots'] as const,
   adminOwner: ['admin', 'owner'] as const,
   adminBookings: ['admin', 'bookings', 'upcoming'] as const,
 }
@@ -17,11 +17,10 @@ export function usePublicEventTypes() {
   })
 }
 
-export function usePublicSlots(eventTypeId: string | undefined) {
+export function usePublicSlots() {
   return useQuery({
-    queryKey: queryKeys.publicSlots(eventTypeId ?? ''),
-    queryFn: () => publicApi.listSlots(eventTypeId ?? ''),
-    enabled: Boolean(eventTypeId),
+    queryKey: queryKeys.publicSlots,
+    queryFn: publicApi.listSlots,
   })
 }
 
@@ -30,8 +29,8 @@ export function useCreateBooking() {
 
   return useMutation({
     mutationFn: (payload: CreateBookingRequest) => publicApi.createBooking(payload),
-    onSuccess: (_, variables) => {
-      queryClient.invalidateQueries({ queryKey: queryKeys.publicSlots(variables.eventTypeId) })
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.publicSlots })
       queryClient.invalidateQueries({ queryKey: queryKeys.adminBookings })
     },
   })

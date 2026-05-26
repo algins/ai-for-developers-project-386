@@ -1,26 +1,45 @@
-help:
-	@echo "Available commands:"
-	@echo "  make setup - install all dependencies"
-	@echo "  make docs  - generate OpenAPI from TypeSpec"
-	@echo "  make frontend-types - generate frontend TS API types"
-	@echo "  make frontend-sync  - regenerate docs and frontend types"
-	@echo "  make frontend-start - run frontend with Prism mock"
-	@echo "  make frontend-check - run frontend typecheck + lint + build"
+setup: install
 
-setup:
+install:
 	npm install
-	cd frontend && npm install
+	$(MAKE) frontend-install
 
-docs:
+build: api-docs frontend-build backend-build
+
+api-docs:
 	npx tsp compile .
+
+frontend-install:
+	cd frontend && npm install
 
 frontend-types:
 	cd frontend && npm run generate:types
 
-frontend-sync: docs frontend-types
+frontend-sync: api-docs frontend-types
+
+frontend-build:
+	cd frontend && npm run build
+
+frontend-lint:
+	cd frontend && npm run lint
+
+frontend-typecheck:
+	cd frontend && npm run typecheck
 
 frontend-start:
+	cd frontend && npm run dev
+
+frontend-start-dev:
 	cd frontend && npm run dev:with-mock
 
-frontend-check:
-	cd frontend && npm run typecheck && npm run lint && npm run build
+backend-build:
+	cd backend && gradle build
+
+backend-lint:
+	cd backend && gradle checkstyleMain checkstyleTest
+
+backend-test:
+	cd backend && gradle test
+
+backend-start:
+	cd backend && gradle bootRun

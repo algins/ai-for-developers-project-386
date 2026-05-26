@@ -7,7 +7,7 @@ import { cn } from '@/lib/utils'
 
 const links = [
   { to: '/', labelKey: 'nav.public' },
-  { to: '/admin/owner', labelKey: 'nav.adminOwner' },
+  { to: '/owner/profile', labelKey: 'nav.adminOwner' },
   { to: '/admin/event-types', labelKey: 'nav.adminEventTypes' },
   { to: '/admin/bookings', labelKey: 'nav.adminBookings' },
 ]

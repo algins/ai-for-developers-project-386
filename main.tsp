@@ -123,11 +123,10 @@ model CreatedBookingResponse {
   body: Booking;
 }
 
-@route("/admin")
 @tag("Admin")
 interface AdminApi {
   @doc("Get the predefined owner profile used in the admin application.")
-  @route("/owner")
+  @route("/owner/profile")
   @get
   getOwnerProfile(): OwnerProfile | ServiceError;
 
@@ -137,7 +136,7 @@ interface AdminApi {
   createEventType(@body body: CreateEventTypeRequest): CreatedEventTypeResponse | ServiceError;
 
   @doc("Get upcoming bookings across all event types for the owner.")
-  @route("/bookings/upcoming")
+  @route("/bookings")
   @get
   listUpcomingBookings(): BookingList | ServiceError;
 }
@@ -149,10 +148,10 @@ interface PublicApi {
   @get
   listEventTypes(): EventTypeList | ServiceError;
 
-  @doc("Get available slots for an event type in the next 14 days from now. Returned slots are only free slots.")
-  @route("/event-types/{eventTypeId}/slots")
+  @doc("Get owner's available slots in the next 14 days from now. Returned slots are only free slots.")
+  @route("/slots")
   @get
-  listAvailableSlots(@path eventTypeId: string): SlotList | ServiceError;
+  listAvailableSlots(): SlotList | ServiceError;
 
   @doc("Create a booking on a free slot in the 14-day booking window. A slot cannot be booked twice, even for different event types.")
   @route("/bookings")

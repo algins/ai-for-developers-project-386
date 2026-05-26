@@ -34,7 +34,7 @@ export function EventTypePage() {
   const navigate = useNavigate()
   const createBooking = useCreateBooking()
   const eventTypesQuery = usePublicEventTypes()
-  const slotsQuery = usePublicSlots(eventTypeId)
+  const slotsQuery = usePublicSlots()
   const bookingSchema = createBookingSchema(t)
 
   const eventType = useMemo(

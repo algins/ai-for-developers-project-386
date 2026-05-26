@@ -15,8 +15,8 @@ export const publicApi = {
     const { data } = await apiClient.get<EventTypeList>('/event-types')
     return data
   },
-  listSlots: async (eventTypeId: string) => {
-    const { data } = await apiClient.get<SlotList>(`/event-types/${eventTypeId}/slots`)
+  listSlots: async () => {
+    const { data } = await apiClient.get<SlotList>('/slots')
     return data
   },
   createBooking: async (payload: CreateBookingRequest) => {
@@ -27,15 +27,15 @@ export const publicApi = {
 
 export const adminApi = {
   getOwner: async () => {
-    const { data } = await apiClient.get<OwnerProfile>('/admin/owner')
+    const { data } = await apiClient.get<OwnerProfile>('/owner/profile')
     return data
   },
   createEventType: async (payload: CreateEventTypeRequest) => {
-    const { data } = await apiClient.post<EventType>('/admin/event-types', payload)
+    const { data } = await apiClient.post<EventType>('/event-types', payload)
     return data
   },
   listUpcomingBookings: async () => {
-    const { data } = await apiClient.get<BookingList>('/admin/bookings/upcoming')
+    const { data } = await apiClient.get<BookingList>('/bookings')
     return data
   },
 }
