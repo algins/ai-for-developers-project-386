@@ -1,44 +1,161 @@
 import "@typespec/http";
 
 using Http;
-@service(#{ title: "Widget Service" })
-namespace DemoService;
 
-model Widget {
+@service(#{ title: "Calendar Booking Service API" })
+namespace CalendarBooking;
+
+model OwnerProfile {
+  @pattern("^[0-9a-fA-F-]{36}$")
   id: string;
-  weight: int32;
-  color: "red" | "blue";
+  @minLength(1)
+  @maxLength(255)
+  name: string;
+  @format("email")
+  email: string;
 }
 
-model WidgetList {
-  items: Widget[];
+model EventType {
+  @pattern("^[0-9a-fA-F-]{36}$")
+  id: string;
+  @minLength(1)
+  @maxLength(100)
+  name: string;
+  @maxLength(1000)
+  description: string;
+  @minValue(5)
+  @maxValue(480)
+  durationMinutes: int32;
+}
+
+model Slot {
+  startTime: utcDateTime;
+  endTime: utcDateTime;
+  isAvailable: boolean;
+}
+
+model Booking {
+  @pattern("^[0-9a-fA-F-]{36}$")
+  id: string;
+  @pattern("^[0-9a-fA-F-]{36}$")
+  eventTypeId: string;
+  @minLength(1)
+  @maxLength(255)
+  guestName: string;
+  @format("email")
+  guestEmail: string;
+  startTime: utcDateTime;
+  endTime: utcDateTime;
+  createdAt: utcDateTime;
+}
+
+model EventTypeList {
+  items: EventType[];
+}
+
+model SlotList {
+  items: Slot[];
+}
+
+model BookingList {
+  items: Booking[];
+}
+
+model CreateEventTypeRequest {
+  @minLength(1)
+  @maxLength(100)
+  name: string;
+  @maxLength(1000)
+  description: string;
+  @minValue(5)
+  @maxValue(480)
+  durationMinutes: int32;
+}
+
+model CreateBookingRequest {
+  @pattern("^[0-9a-fA-F-]{36}$")
+  eventTypeId: string;
+  @minLength(1)
+  @maxLength(255)
+  guestName: string;
+  @format("email")
+  guestEmail: string;
+  startTime: utcDateTime;
 }
 
 @error
-model Error {
-  code: int32;
+model BadRequestError {
+  @statusCode
+  statusCode: 400;
+  code: "BAD_REQUEST";
   message: string;
 }
 
-model AnalyzeResult {
-  id: string;
-  analysis: string;
+@error
+model NotFoundError {
+  @statusCode
+  statusCode: 404;
+  code: "NOT_FOUND";
+  message: string;
 }
 
-@route("/widgets")
-@tag("Widgets")
-interface Widgets {
-  /** List widgets */
-  @get list(): WidgetList | Error;
-  /** Read widgets */
-  @get read(@path id: string): Widget | Error;
-  /** Create a widget */
-  @post create(@body body: Widget): Widget | Error;
-  /** Update a widget */
-  @patch update(@path id: string, @body body: MergePatchUpdate<Widget>): Widget | Error;
-  /** Delete a widget */
-  @delete delete(@path id: string): void | Error;
+@error
+model ConflictError {
+  @statusCode
+  statusCode: 409;
+  code: "CONFLICT";
+  message: string;
+}
 
-  /** Analyze a widget */
-  @route("{id}/analyze") @post analyze(@path id: string): AnalyzeResult | Error;
+alias ServiceError = BadRequestError | NotFoundError | ConflictError;
+
+model CreatedEventTypeResponse {
+  @statusCode
+  statusCode: 201;
+  @body
+  body: EventType;
+}
+
+model CreatedBookingResponse {
+  @statusCode
+  statusCode: 201;
+  @body
+  body: Booking;
+}
+
+@route("/admin")
+@tag("Admin")
+interface AdminApi {
+  @doc("Get the predefined owner profile used in the admin application.")
+  @route("/owner")
+  @get
+  getOwnerProfile(): OwnerProfile | ServiceError;
+
+  @doc("Create a new event type for the predefined calendar owner.")
+  @route("/event-types")
+  @post
+  createEventType(@body body: CreateEventTypeRequest): CreatedEventTypeResponse | ServiceError;
+
+  @doc("Get upcoming bookings across all event types for the owner.")
+  @route("/bookings/upcoming")
+  @get
+  listUpcomingBookings(): BookingList | ServiceError;
+}
+
+@tag("Public")
+interface PublicApi {
+  @doc("List public event types available for booking.")
+  @route("/event-types")
+  @get
+  listEventTypes(): EventTypeList | ServiceError;
+
+  @doc("Get available slots for an event type in the next 14 days from now. Returned slots are only free slots.")
+  @route("/event-types/{eventTypeId}/slots")
+  @get
+  listAvailableSlots(@path eventTypeId: string): SlotList | ServiceError;
+
+  @doc("Create a booking on a free slot in the 14-day booking window. A slot cannot be booked twice, even for different event types.")
+  @route("/bookings")
+  @post
+  createBooking(@body body: CreateBookingRequest): CreatedBookingResponse | ServiceError;
 }
