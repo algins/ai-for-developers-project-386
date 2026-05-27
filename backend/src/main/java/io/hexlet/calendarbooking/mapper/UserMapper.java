@@ -5,7 +5,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-import io.hexlet.calendarbooking.dto.UserDTO;
+import io.hexlet.calendarbooking.dto.UserDto;
 import io.hexlet.calendarbooking.model.User;
 
 @Mapper(
@@ -14,5 +14,5 @@ import io.hexlet.calendarbooking.model.User;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface UserMapper {
-    UserDTO map(User model);
+    UserDto map(User model);
 }

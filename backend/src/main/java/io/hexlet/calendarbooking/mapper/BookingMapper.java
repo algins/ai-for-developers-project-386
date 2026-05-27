@@ -5,8 +5,8 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-import io.hexlet.calendarbooking.dto.BookingCreateDTO;
-import io.hexlet.calendarbooking.dto.BookingDTO;
+import io.hexlet.calendarbooking.dto.BookingCreateDto;
+import io.hexlet.calendarbooking.dto.BookingDto;
 import io.hexlet.calendarbooking.model.Booking;
 
 @Mapper(
@@ -15,6 +15,6 @@ import io.hexlet.calendarbooking.model.Booking;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class BookingMapper {
-    public abstract Booking map(BookingCreateDTO dto);
-    public abstract BookingDTO map(Booking model);
+    public abstract Booking map(BookingCreateDto dto);
+    public abstract BookingDto map(Booking model);
 }

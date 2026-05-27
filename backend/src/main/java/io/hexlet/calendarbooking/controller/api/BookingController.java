@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.hexlet.calendarbooking.dto.BookingCreateDTO;
-import io.hexlet.calendarbooking.dto.BookingDTO;
+import io.hexlet.calendarbooking.dto.BookingCreateDto;
+import io.hexlet.calendarbooking.dto.BookingDto;
 import io.hexlet.calendarbooking.service.BookingService;
 import jakarta.validation.Valid;
 
@@ -25,13 +25,13 @@ public class BookingController {
 
     @GetMapping("/bookings")
     @ResponseStatus(HttpStatus.OK)
-    public List<BookingDTO> index() {
+    public List<BookingDto> index() {
         return bookingService.listUpcomingBookings();
     }
 
     @PostMapping("/bookings")
     @ResponseStatus(HttpStatus.CREATED)
-    public BookingDTO create(@Valid @RequestBody BookingCreateDTO dto) {
+    public BookingDto create(@Valid @RequestBody BookingCreateDto dto) {
         return bookingService.createBooking(dto);
     }
 }

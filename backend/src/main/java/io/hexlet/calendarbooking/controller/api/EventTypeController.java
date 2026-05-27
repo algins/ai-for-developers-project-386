@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.hexlet.calendarbooking.dto.EventTypeCreateDTO;
-import io.hexlet.calendarbooking.dto.EventTypeDTO;
+import io.hexlet.calendarbooking.dto.EventTypeCreateDto;
+import io.hexlet.calendarbooking.dto.EventTypeDto;
 import io.hexlet.calendarbooking.service.EventTypeService;
 import jakarta.validation.Valid;
 
@@ -25,13 +25,13 @@ public class EventTypeController {
 
     @GetMapping("/event-types")
     @ResponseStatus(HttpStatus.OK)
-    public List<EventTypeDTO> index() {
+    public List<EventTypeDto> index() {
         return eventTypeService.listEventTypes();
     }
 
     @PostMapping("/event-types")
     @ResponseStatus(HttpStatus.CREATED)
-    public EventTypeDTO create(@Valid @RequestBody EventTypeCreateDTO dto) {
+    public EventTypeDto create(@Valid @RequestBody EventTypeCreateDto dto) {
         return eventTypeService.createEventType(dto);
     }
 }

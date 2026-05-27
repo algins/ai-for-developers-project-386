@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.hexlet.calendarbooking.dto.EventTypeCreateDTO;
-import io.hexlet.calendarbooking.dto.EventTypeDTO;
+import io.hexlet.calendarbooking.dto.EventTypeCreateDto;
+import io.hexlet.calendarbooking.dto.EventTypeDto;
 import io.hexlet.calendarbooking.exception.ConflictException;
 import io.hexlet.calendarbooking.exception.NotFoundException;
 import io.hexlet.calendarbooking.service.EventTypeService;
@@ -46,7 +46,7 @@ class EventTypeControllerTest {
     void testIndex() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
 
-        var eventType = new EventTypeDTO(
+        var eventType = new EventTypeDto(
             eventTypeModel.getId(),
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
@@ -75,20 +75,20 @@ class EventTypeControllerTest {
     void testCreate() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
 
-        var data = new EventTypeCreateDTO(
+        var data = new EventTypeCreateDto(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
             eventTypeModel.getDurationMinutes()
         );
 
-        var createdEventType = new EventTypeDTO(
+        var createdEventType = new EventTypeDto(
             eventTypeModel.getId(),
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
             eventTypeModel.getDurationMinutes()
         );
 
-        when(eventTypeService.createEventType(any(EventTypeCreateDTO.class)))
+        when(eventTypeService.createEventType(any(EventTypeCreateDto.class)))
             .thenReturn(createdEventType);
 
         var request = post("/event-types")
@@ -132,13 +132,13 @@ class EventTypeControllerTest {
     void testCreateWithNotFound() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
 
-        var data = new EventTypeCreateDTO(
+        var data = new EventTypeCreateDto(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
             eventTypeModel.getDurationMinutes()
         );
 
-        when(eventTypeService.createEventType(any(EventTypeCreateDTO.class)))
+        when(eventTypeService.createEventType(any(EventTypeCreateDto.class)))
             .thenThrow(new NotFoundException("Owner profile not found"));
 
         var request = post("/event-types")
@@ -158,13 +158,13 @@ class EventTypeControllerTest {
     void testCreateWithConflict() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
         
-        var data = new EventTypeCreateDTO(
+        var data = new EventTypeCreateDto(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
             eventTypeModel.getDurationMinutes()
         );
 
-        when(eventTypeService.createEventType(any(EventTypeCreateDTO.class)))
+        when(eventTypeService.createEventType(any(EventTypeCreateDto.class)))
             .thenThrow(new ConflictException("Event type already exists"));
 
         var request = post("/event-types")

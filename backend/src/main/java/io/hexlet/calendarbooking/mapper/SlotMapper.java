@@ -5,7 +5,7 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-import io.hexlet.calendarbooking.dto.SlotDTO;
+import io.hexlet.calendarbooking.dto.SlotDto;
 import io.hexlet.calendarbooking.model.Slot;
 
 @Mapper(
@@ -14,5 +14,5 @@ import io.hexlet.calendarbooking.model.Slot;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public interface SlotMapper {
-    SlotDTO map(Slot model);
+    SlotDto map(Slot model);
 }

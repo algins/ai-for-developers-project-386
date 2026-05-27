@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.hexlet.calendarbooking.dto.SlotDTO;
+import io.hexlet.calendarbooking.dto.SlotDto;
 import io.hexlet.calendarbooking.service.SlotService;
 
 @RestController
@@ -21,7 +21,7 @@ public class SlotController {
 
     @GetMapping("/slots")
     @ResponseStatus(HttpStatus.OK)
-    public List<SlotDTO> index() {
+    public List<SlotDto> index() {
         return slotService.listAvailableSlots();
     }
 }

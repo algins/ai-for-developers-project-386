@@ -21,8 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import io.hexlet.calendarbooking.dto.BookingCreateDTO;
-import io.hexlet.calendarbooking.dto.BookingDTO;
+import io.hexlet.calendarbooking.dto.BookingCreateDto;
+import io.hexlet.calendarbooking.dto.BookingDto;
 import io.hexlet.calendarbooking.exception.ConflictException;
 import io.hexlet.calendarbooking.exception.NotFoundException;
 import io.hexlet.calendarbooking.service.BookingService;
@@ -46,7 +46,7 @@ class BookingControllerTest {
     void testIndexUpcoming() throws Exception {
         var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
 
-        var booking = new BookingDTO(
+        var booking = new BookingDto(
             bookingModel.getId(),
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
@@ -77,13 +77,13 @@ class BookingControllerTest {
     void testCreate() throws Exception {
         var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
 
-        var data = new BookingCreateDTO(
+        var data = new BookingCreateDto(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
             bookingModel.getGuestEmail(),
             bookingModel.getStartTime()
         );
-        var createdBooking = new BookingDTO(
+        var createdBooking = new BookingDto(
             bookingModel.getId(),
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
@@ -93,7 +93,7 @@ class BookingControllerTest {
             bookingModel.getCreatedAt()
         );
 
-        when(bookingService.createBooking(any(BookingCreateDTO.class)))
+        when(bookingService.createBooking(any(BookingCreateDto.class)))
             .thenReturn(createdBooking);
 
         var request = post("/bookings")
@@ -138,14 +138,14 @@ class BookingControllerTest {
     void testCreateWithNotFound() throws Exception {
         var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
 
-        var data = new BookingCreateDTO(
+        var data = new BookingCreateDto(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
             bookingModel.getGuestEmail(),
             bookingModel.getStartTime()
         );
 
-        when(bookingService.createBooking(any(BookingCreateDTO.class)))
+        when(bookingService.createBooking(any(BookingCreateDto.class)))
             .thenThrow(new NotFoundException("Event type not found"));
 
         var request = post("/bookings")
@@ -165,14 +165,14 @@ class BookingControllerTest {
     void testCreateConflict() throws Exception {
         var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
         
-        var data = new BookingCreateDTO(
+        var data = new BookingCreateDto(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
             bookingModel.getGuestEmail(),
             bookingModel.getStartTime()
         );
 
-        when(bookingService.createBooking(any(BookingCreateDTO.class)))
+        when(bookingService.createBooking(any(BookingCreateDto.class)))
             .thenThrow(new ConflictException("Selected slot is already booked"));
 
         var request = post("/bookings")

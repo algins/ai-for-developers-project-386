@@ -13,7 +13,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import io.hexlet.calendarbooking.dto.UserDTO;
+import io.hexlet.calendarbooking.dto.UserDto;
 import io.hexlet.calendarbooking.exception.BadRequestException;
 import io.hexlet.calendarbooking.exception.ConflictException;
 import io.hexlet.calendarbooking.exception.NotFoundException;
@@ -35,7 +35,7 @@ class CalendarOwnerControllerTest {
     void testShow() throws Exception {
         var ownerModel = Instancio.of(MODEL_GENERATOR.getUserModel()).create();
         
-        var owner = new UserDTO(
+        var owner = new UserDto(
             ownerModel.getId(),
             ownerModel.getName(),
             ownerModel.getEmail()

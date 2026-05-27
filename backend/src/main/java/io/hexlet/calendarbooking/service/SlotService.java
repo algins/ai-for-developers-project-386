@@ -8,7 +8,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.hexlet.calendarbooking.dto.SlotDTO;
+import io.hexlet.calendarbooking.dto.SlotDto;
 import io.hexlet.calendarbooking.mapper.SlotMapper;
 import io.hexlet.calendarbooking.repository.BookingRepository;
 import io.hexlet.calendarbooking.repository.SlotRepository;
@@ -29,7 +29,7 @@ public class SlotService {
     @Autowired
     private SlotMapper slotMapper;
 
-    public List<SlotDTO> listAvailableSlots() {
+    public List<SlotDto> listAvailableSlots() {
         var now = Instant.now(clock).truncatedTo(ChronoUnit.MINUTES);
         var windowEnd = now.plus(BOOKING_WINDOW_DAYS, ChronoUnit.DAYS);
 

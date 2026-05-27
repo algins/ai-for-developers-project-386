@@ -5,8 +5,8 @@ import org.mapstruct.MappingConstants;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 
-import io.hexlet.calendarbooking.dto.EventTypeCreateDTO;
-import io.hexlet.calendarbooking.dto.EventTypeDTO;
+import io.hexlet.calendarbooking.dto.EventTypeCreateDto;
+import io.hexlet.calendarbooking.dto.EventTypeDto;
 import io.hexlet.calendarbooking.model.EventType;
 
 @Mapper(
@@ -15,6 +15,6 @@ import io.hexlet.calendarbooking.model.EventType;
     unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class EventTypeMapper {
-    public abstract EventType map(EventTypeCreateDTO dto);
-    public abstract EventTypeDTO map(EventType model);
+    public abstract EventType map(EventTypeCreateDto dto);
+    public abstract EventTypeDto map(EventType model);
 }

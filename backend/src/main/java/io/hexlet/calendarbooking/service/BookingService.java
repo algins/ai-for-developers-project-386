@@ -11,8 +11,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.hexlet.calendarbooking.dto.BookingCreateDTO;
-import io.hexlet.calendarbooking.dto.BookingDTO;
+import io.hexlet.calendarbooking.dto.BookingCreateDto;
+import io.hexlet.calendarbooking.dto.BookingDto;
 import io.hexlet.calendarbooking.exception.BadRequestException;
 import io.hexlet.calendarbooking.exception.ConflictException;
 import io.hexlet.calendarbooking.exception.NotFoundException;
@@ -38,7 +38,7 @@ public class BookingService {
     @Autowired
     private BookingMapper bookingMapper;
 
-    public BookingDTO createBooking(BookingCreateDTO dto) {
+    public BookingDto createBooking(BookingCreateDto dto) {
         var eventTypeId = dto.getEventTypeId();
 
         var eventType = eventTypeRepository.findById(eventTypeId)
@@ -71,7 +71,7 @@ public class BookingService {
         return bookingMapper.map(bookingRepository.save(booking));
     }
 
-    public List<BookingDTO> listUpcomingBookings() {
+    public List<BookingDto> listUpcomingBookings() {
         var upcomingBookings = bookingRepository.findUpcoming().stream()
             .map(bookingMapper::map)
             .toList();

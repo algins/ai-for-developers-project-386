@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import io.hexlet.calendarbooking.dto.UserDTO;
+import io.hexlet.calendarbooking.dto.UserDto;
 import io.hexlet.calendarbooking.service.UserService;
 
 @RestController
@@ -19,7 +19,7 @@ public class CalendarOwnerController {
 
     @GetMapping("/calendar-owner")
     @ResponseStatus(HttpStatus.OK)
-    public UserDTO show() {
+    public UserDto show() {
         return userService.getCalendarOwner();
     }
 }

@@ -3,7 +3,7 @@ package io.hexlet.calendarbooking.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import io.hexlet.calendarbooking.dto.UserDTO;
+import io.hexlet.calendarbooking.dto.UserDto;
 import io.hexlet.calendarbooking.mapper.UserMapper;
 import io.hexlet.calendarbooking.repository.UserRepository;
 
@@ -15,7 +15,7 @@ public class UserService {
     @Autowired
     private UserMapper userMapper;
 
-    public UserDTO getCalendarOwner() {
+    public UserDto getCalendarOwner() {
         var calendarOwner = userRepository.findCalendarOwner()
             .orElseThrow(() -> new IllegalStateException("Calendar owner profile is not configured"));
 

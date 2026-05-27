@@ -15,7 +15,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.web.servlet.MockMvc;
 
-import io.hexlet.calendarbooking.dto.SlotDTO;
+import io.hexlet.calendarbooking.dto.SlotDto;
 import io.hexlet.calendarbooking.exception.BadRequestException;
 import io.hexlet.calendarbooking.exception.ConflictException;
 import io.hexlet.calendarbooking.exception.NotFoundException;
@@ -37,7 +37,7 @@ class SlotControllerTest {
     void testIndex() throws Exception {
         var slotModel = Instancio.of(MODEL_GENERATOR.getSlotModel()).create();
 
-        var slot = new SlotDTO(
+        var slot = new SlotDto(
             slotModel.getStartTime(),
             slotModel.getEndTime(),
             slotModel.isAvailable()

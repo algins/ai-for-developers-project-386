@@ -48,7 +48,6 @@ Use `make` targets first.
 
 ## Conventions That Matter
 
-- Backend class naming favors pluralized controllers and `*DTO` naming.
 - Backend tests use Spring MVC test + Mockito style and JSON assertions.
 - Frontend uses strict TypeScript and ESLint; prefer fixing root causes over type casts.
 - Keep changes focused; avoid broad refactors unless explicitly requested.
