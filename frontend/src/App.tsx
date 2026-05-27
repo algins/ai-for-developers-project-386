@@ -1,28 +1,44 @@
+import { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 
 import { AppShell } from '@/components/layout/app-shell'
-import { AdminBookingsPage } from '@/pages/admin/bookings-page'
-import { AdminEventTypesPage } from '@/pages/admin/event-types-page'
-import { AdminOwnerPage } from '@/pages/admin/owner-page'
-import { BookingConfirmationPage } from '@/pages/public/booking-confirmation-page'
-import { EventTypePage } from '@/pages/public/event-type-page'
-import { HomePage } from '@/pages/public/home-page'
-import { NotFoundPage } from '@/pages/shared/not-found-page'
+
+const HomePage = lazy(() => import('@/pages/public/home-page').then((module) => ({ default: module.HomePage })))
+const EventTypePage = lazy(() =>
+  import('@/pages/public/event-type-page').then((module) => ({ default: module.EventTypePage })),
+)
+const BookingConfirmationPage = lazy(() =>
+  import('@/pages/public/booking-confirmation-page').then((module) => ({ default: module.BookingConfirmationPage })),
+)
+const AdminOwnerPage = lazy(() =>
+  import('@/pages/admin/owner-page').then((module) => ({ default: module.AdminOwnerPage })),
+)
+const AdminEventTypesPage = lazy(() =>
+  import('@/pages/admin/event-types-page').then((module) => ({ default: module.AdminEventTypesPage })),
+)
+const AdminBookingsPage = lazy(() =>
+  import('@/pages/admin/bookings-page').then((module) => ({ default: module.AdminBookingsPage })),
+)
+const NotFoundPage = lazy(() =>
+  import('@/pages/shared/not-found-page').then((module) => ({ default: module.NotFoundPage })),
+)
 
 function App() {
   return (
     <AppShell>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route path="/event-types/:eventTypeId" element={<EventTypePage />} />
-        <Route path="/booking/confirmation/:bookingId" element={<BookingConfirmationPage />} />
+      <Suspense fallback={<div className="p-4">Loading...</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/event-types/:eventTypeId" element={<EventTypePage />} />
+          <Route path="/booking/confirmation/:bookingId" element={<BookingConfirmationPage />} />
 
-        <Route path="/owner/profile" element={<AdminOwnerPage />} />
-        <Route path="/admin/event-types" element={<AdminEventTypesPage />} />
-        <Route path="/admin/bookings" element={<AdminBookingsPage />} />
+          <Route path="/owner/profile" element={<AdminOwnerPage />} />
+          <Route path="/admin/event-types" element={<AdminEventTypesPage />} />
+          <Route path="/admin/bookings" element={<AdminBookingsPage />} />
 
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
     </AppShell>
   )
 }
