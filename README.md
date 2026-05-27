@@ -27,13 +27,7 @@ All common workflows are encapsulated in the root `Makefile`.
 make setup
 ```
 
-2. Generate API docs and frontend types:
-
-```bash
-make frontend-sync
-```
-
-3. Start frontend (Vite):
+2. Start frontend (Vite):
 
 ```bash
 make frontend-start
@@ -45,7 +39,7 @@ Backend can be started separately:
 make backend-start
 ```
 
-4. Open the app in browser:
+3. Open the app in browser:
 
 - http://localhost:5173/
 
@@ -53,7 +47,7 @@ make backend-start
 
 ### 1) Setup
 
-Install dependencies for root and frontend:
+Run full project setup (root deps, API docs, frontend setup/build, backend build):
 
 ```bash
 make setup
@@ -67,10 +61,16 @@ Compile TypeSpec once:
 make api-docs
 ```
 
-Run both steps in one command:
+Generate frontend API types:
 
 ```bash
-make frontend-sync
+make frontend-types
+```
+
+Run full frontend preparation (install, types, build):
+
+```bash
+make frontend-setup
 ```
 
 ### 3) Run the App
@@ -114,7 +114,8 @@ Typical loop while editing contract + frontend:
 2. Rebuild contract and frontend types:
 
 ```bash
-make frontend-sync
+make api-docs
+make frontend-types
 ```
 
 3. Keep app running with:
@@ -159,10 +160,24 @@ Install dependencies:
 make setup
 ```
 
-Build all artifacts:
+Run only frontend setup/build:
 
 ```bash
-make build
+make frontend-setup
+```
+
+Run only backend build:
+
+```bash
+make backend-setup
+```
+
+Build artifacts:
+
+```bash
+make api-docs
+make frontend-build
+make backend-build
 ```
 
 Generated OpenAPI files are written to `tsp-output/schema/`.

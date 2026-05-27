@@ -1,21 +1,18 @@
-setup: install
+setup: install api-docs frontend-setup backend-setup
 
 install:
 	npm install
-	$(MAKE) frontend-install
-
-build: api-docs frontend-build backend-build
 
 api-docs:
 	npx tsp compile .
+
+frontend-setup: frontend-install frontend-types frontend-build
 
 frontend-install:
 	cd frontend && npm install
 
 frontend-types:
 	cd frontend && npm run generate:types
-
-frontend-sync: api-docs frontend-types
 
 frontend-build:
 	cd frontend && npm run build
@@ -31,6 +28,8 @@ frontend-start:
 
 frontend-start-dev:
 	cd frontend && npm run dev:with-mock
+
+backend-setup: backend-build
 
 backend-build:
 	cd backend && gradle build
