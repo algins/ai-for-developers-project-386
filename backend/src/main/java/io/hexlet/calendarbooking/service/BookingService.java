@@ -40,7 +40,7 @@ public class BookingService {
 
     public BookingDTO createBooking(BookingCreateDTO dto) {
         var eventTypeId = dto.getEventTypeId();
-        
+
         var eventType = eventTypeRepository.findById(eventTypeId)
             .orElseThrow(() -> new NotFoundException("Event type not found"));
 

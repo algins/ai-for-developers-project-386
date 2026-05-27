@@ -39,7 +39,7 @@ public class InMemoryBookingRepository implements BookingRepository {
         synchronized (lock) {
             for (var booking : bookings) {
                 var overlaps = startTime.isBefore(booking.getEndTime()) && booking.getStartTime().isBefore(endTime);
-                
+
                 if (overlaps) {
                     return true;
                 }

@@ -23,7 +23,7 @@ import io.hexlet.calendarbooking.util.ModelGenerator;
 @WebMvcTest(CalendarOwnerController.class)
 @Import(io.hexlet.calendarbooking.exception.GlobalExceptionHandler.class)
 class CalendarOwnerControllerTest {
-    private static final ModelGenerator modelGenerator = new ModelGenerator();
+    private static final ModelGenerator MODEL_GENERATOR = new ModelGenerator();
 
     @Autowired
     private MockMvc mockMvc;
@@ -33,7 +33,7 @@ class CalendarOwnerControllerTest {
 
     @Test
     void testShow() throws Exception {
-        var ownerModel = Instancio.of(modelGenerator.getUserModel()).create();
+        var ownerModel = Instancio.of(MODEL_GENERATOR.getUserModel()).create();
         var owner = new UserDTO(
             ownerModel.getId(),
             ownerModel.getName(),

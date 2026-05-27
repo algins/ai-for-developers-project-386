@@ -31,7 +31,7 @@ import io.hexlet.calendarbooking.util.ModelGenerator;
 @WebMvcTest(EventTypeController.class)
 @Import(io.hexlet.calendarbooking.exception.GlobalExceptionHandler.class)
 class EventTypeControllerTest {
-    private static final ModelGenerator modelGenerator = new ModelGenerator();
+    private static final ModelGenerator MODEL_GENERATOR = new ModelGenerator();
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +44,7 @@ class EventTypeControllerTest {
 
     @Test
     void testIndex() throws Exception {
-        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
         var eventType = new EventTypeDTO(
             eventTypeModel.getId(),
             eventTypeModel.getName(),
@@ -71,7 +71,7 @@ class EventTypeControllerTest {
 
     @Test
     void testCreate() throws Exception {
-        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
         var data = new EventTypeCreateDTO(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
@@ -126,7 +126,7 @@ class EventTypeControllerTest {
 
     @Test
     void testCreateWithNotFound() throws Exception {
-        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
         var data = new EventTypeCreateDTO(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
@@ -151,7 +151,7 @@ class EventTypeControllerTest {
 
     @Test
     void testCreateWithConflict() throws Exception {
-        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
         var data = new EventTypeCreateDTO(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),

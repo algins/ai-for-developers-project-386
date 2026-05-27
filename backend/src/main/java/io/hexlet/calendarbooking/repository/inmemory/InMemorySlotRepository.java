@@ -30,7 +30,11 @@ public class InMemorySlotRepository implements SlotRepository {
             var workdayStart = day.atTime(WORK_DAY_START).toInstant(ZoneOffset.UTC);
             var workdayEnd = day.atTime(WORK_DAY_END).toInstant(ZoneOffset.UTC);
 
-            for (var slotStart = workdayStart; !slotStart.plus(SLOT_DURATION).isAfter(workdayEnd); slotStart = slotStart.plus(SLOT_DURATION)) {
+            for (
+                var slotStart = workdayStart;
+                !slotStart.plus(SLOT_DURATION).isAfter(workdayEnd);
+                slotStart = slotStart.plus(SLOT_DURATION)
+            ) {
                 if (slotStart.isBefore(fromInclusive) || !slotStart.isBefore(toExclusive)) {
                     continue;
                 }

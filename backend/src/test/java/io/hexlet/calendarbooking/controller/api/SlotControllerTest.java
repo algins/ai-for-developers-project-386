@@ -25,7 +25,7 @@ import io.hexlet.calendarbooking.util.ModelGenerator;
 @WebMvcTest(SlotController.class)
 @Import(io.hexlet.calendarbooking.exception.GlobalExceptionHandler.class)
 class SlotControllerTest {
-    private static final ModelGenerator modelGenerator = new ModelGenerator();
+    private static final ModelGenerator MODEL_GENERATOR = new ModelGenerator();
 
     @Autowired
     private MockMvc mockMvc;
@@ -35,7 +35,7 @@ class SlotControllerTest {
 
     @Test
     void testIndex() throws Exception {
-        var slotModel = Instancio.of(modelGenerator.getSlotModel()).create();
+        var slotModel = Instancio.of(MODEL_GENERATOR.getSlotModel()).create();
         var slot = new SlotDTO(
             slotModel.getStartTime(),
             slotModel.getEndTime(),

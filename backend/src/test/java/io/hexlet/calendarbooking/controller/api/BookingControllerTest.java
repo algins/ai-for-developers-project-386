@@ -31,7 +31,7 @@ import io.hexlet.calendarbooking.util.ModelGenerator;
 @WebMvcTest(BookingController.class)
 @Import(io.hexlet.calendarbooking.exception.GlobalExceptionHandler.class)
 class BookingControllerTest {
-    private static final ModelGenerator modelGenerator = new ModelGenerator();
+    private static final ModelGenerator MODEL_GENERATOR = new ModelGenerator();
 
     @Autowired
     private MockMvc mockMvc;
@@ -44,7 +44,7 @@ class BookingControllerTest {
 
     @Test
     void testIndexUpcoming() throws Exception {
-        var bookingModel = Instancio.of(modelGenerator.getBookingModel()).create();
+        var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
         var booking = new BookingDTO(
             bookingModel.getId(),
             bookingModel.getEventTypeId(),
@@ -73,7 +73,7 @@ class BookingControllerTest {
 
     @Test
     void testCreate() throws Exception {
-        var bookingModel = Instancio.of(modelGenerator.getBookingModel()).create();
+        var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
         var data = new BookingCreateDTO(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
@@ -133,7 +133,7 @@ class BookingControllerTest {
 
     @Test
     void testCreateWithNotFound() throws Exception {
-        var bookingModel = Instancio.of(modelGenerator.getBookingModel()).create();
+        var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
         var data = new BookingCreateDTO(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
@@ -159,7 +159,7 @@ class BookingControllerTest {
 
     @Test
     void testCreateConflict() throws Exception {
-        var bookingModel = Instancio.of(modelGenerator.getBookingModel()).create();
+        var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
         var data = new BookingCreateDTO(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),
