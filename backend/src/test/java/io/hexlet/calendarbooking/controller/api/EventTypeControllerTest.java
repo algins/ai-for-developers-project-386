@@ -1,14 +1,16 @@
 package io.hexlet.calendarbooking.controller.api;
 
+import static net.javacrumbs.jsonunit.assertj.JsonAssertions.assertThatJson;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
+import java.util.Map;
 
+import org.instancio.Instancio;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -20,13 +22,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.hexlet.calendarbooking.dto.EventTypeCreateDTO;
+import io.hexlet.calendarbooking.dto.EventTypeDTO;
+import io.hexlet.calendarbooking.exception.ConflictException;
+import io.hexlet.calendarbooking.exception.NotFoundException;
 import io.hexlet.calendarbooking.service.EventTypeService;
 import io.hexlet.calendarbooking.util.ModelGenerator;
 
 @WebMvcTest(EventTypeController.class)
 @Import(io.hexlet.calendarbooking.exception.GlobalExceptionHandler.class)
 class EventTypeControllerTest {
-    private static final ModelGenerator MODEL_GENERATOR = new ModelGenerator();
+    private static final ModelGenerator modelGenerator = new ModelGenerator();
 
     @Autowired
     private MockMvc mockMvc;
@@ -39,28 +44,133 @@ class EventTypeControllerTest {
 
     @Test
     void testIndex() throws Exception {
-        var eventType = MODEL_GENERATOR.createEventTypeDTO();
+        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var eventType = new EventTypeDTO(
+            eventTypeModel.getId(),
+            eventTypeModel.getName(),
+            eventTypeModel.getDescription(),
+            eventTypeModel.getDurationMinutes()
+        );
 
         when(eventTypeService.listEventTypes()).thenReturn(List.of(eventType));
 
-        mockMvc.perform(get("/event-types"))
-                .andExpect(status().isOk())
-            .andExpect(jsonPath("$[0].id").value("5e2cb43b-a9e0-4dda-a09f-040f11366549"))
-            .andExpect(jsonPath("$[0].durationMinutes").value(30));
+        var request = get("/event-types");
+
+        var result = mockMvc.perform(request)
+            .andExpect(status().isOk())
+            .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+
+        assertThatJson(body).and(v -> {
+            v.node("[0].id").isEqualTo(eventType.getId().toString());
+            v.node("[0].name").isEqualTo(eventType.getName());
+            v.node("[0].durationMinutes").isEqualTo(eventType.getDurationMinutes());
+        });
     }
 
     @Test
     void testCreate() throws Exception {
-        var request = MODEL_GENERATOR.createEventTypeCreateDTO();
+        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var data = new EventTypeCreateDTO(
+            eventTypeModel.getName(),
+            eventTypeModel.getDescription(),
+            eventTypeModel.getDurationMinutes()
+        );
+        var createdEventType = new EventTypeDTO(
+            eventTypeModel.getId(),
+            eventTypeModel.getName(),
+            eventTypeModel.getDescription(),
+            eventTypeModel.getDurationMinutes()
+        );
 
         when(eventTypeService.createEventType(any(EventTypeCreateDTO.class)))
-                .thenReturn(MODEL_GENERATOR.createEventTypeDTO());
+            .thenReturn(createdEventType);
 
-        mockMvc.perform(post("/event-types")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(request)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").value("5e2cb43b-a9e0-4dda-a09f-040f11366549"))
-                .andExpect(jsonPath("$.name").value("Intro Call"));
+        var request = post("/event-types")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(data));
+
+        var result = mockMvc.perform(request)
+            .andExpect(status().isCreated())
+            .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+
+        assertThatJson(body).and(v -> {
+            v.node("id").isEqualTo(createdEventType.getId().toString());
+            v.node("name").isEqualTo(createdEventType.getName());
+        });
+    }
+
+    @Test
+    void testCreateWithInvalidData() throws Exception {
+        var data = Map.of(
+            "name", "",
+            "description", "A short introduction call",
+            "durationMinutes", 30
+        );
+
+        var request = post("/event-types")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(data));
+
+        var result = mockMvc.perform(request)
+            .andExpect(status().isBadRequest())
+            .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+
+        assertThatJson(body).node("code").isEqualTo("BAD_REQUEST");
+    }
+
+    @Test
+    void testCreateWithNotFound() throws Exception {
+        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var data = new EventTypeCreateDTO(
+            eventTypeModel.getName(),
+            eventTypeModel.getDescription(),
+            eventTypeModel.getDurationMinutes()
+        );
+
+        when(eventTypeService.createEventType(any(EventTypeCreateDTO.class)))
+            .thenThrow(new NotFoundException("Owner profile not found"));
+
+        var request = post("/event-types")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(data));
+
+        var result = mockMvc.perform(request)
+            .andExpect(status().isNotFound())
+            .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+
+        assertThatJson(body).node("code").isEqualTo("NOT_FOUND");
+    }
+
+    @Test
+    void testCreateWithConflict() throws Exception {
+        var eventTypeModel = Instancio.of(modelGenerator.getEventTypeModel()).create();
+        var data = new EventTypeCreateDTO(
+            eventTypeModel.getName(),
+            eventTypeModel.getDescription(),
+            eventTypeModel.getDurationMinutes()
+        );
+
+        when(eventTypeService.createEventType(any(EventTypeCreateDTO.class)))
+            .thenThrow(new ConflictException("Event type already exists"));
+
+        var request = post("/event-types")
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(data));
+
+        var result = mockMvc.perform(request)
+            .andExpect(status().isConflict())
+            .andReturn();
+
+        var body = result.getResponse().getContentAsString();
+
+        assertThatJson(body).node("code").isEqualTo("CONFLICT");
     }
 }

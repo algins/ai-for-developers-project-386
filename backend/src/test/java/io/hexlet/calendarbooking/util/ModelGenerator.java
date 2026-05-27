@@ -3,106 +3,70 @@ package io.hexlet.calendarbooking.util;
 import java.time.Instant;
 import java.util.UUID;
 
-import io.hexlet.calendarbooking.dto.BookingCreateDTO;
-import io.hexlet.calendarbooking.dto.BookingDTO;
-import io.hexlet.calendarbooking.dto.EventTypeCreateDTO;
-import io.hexlet.calendarbooking.dto.EventTypeDTO;
-import io.hexlet.calendarbooking.dto.SlotDTO;
-import io.hexlet.calendarbooking.dto.UserDTO;
+import org.instancio.Instancio;
+import org.instancio.Model;
+import org.instancio.Select;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import io.hexlet.calendarbooking.model.Booking;
 import io.hexlet.calendarbooking.model.EventType;
+import io.hexlet.calendarbooking.model.Slot;
+import io.hexlet.calendarbooking.model.User;
+import jakarta.annotation.PostConstruct;
+import lombok.Getter;
+import net.datafaker.Faker;
 
+@Getter
+@Component
 public class ModelGenerator {
 
-    public Booking createBookingModel() {
-        return new Booking(
-            UUID.fromString("b9facce4-44c0-4a7c-aac8-29e17f8ba2fb"),
-            UUID.fromString("5e2cb43b-a9e0-4dda-a09f-040f11366549"),
-            "Alice",
-            "alice@example.com",
-            Instant.parse("2026-05-27T09:00:00Z"),
-            Instant.parse("2026-05-27T09:30:00Z"),
-            Instant.parse("2026-05-26T08:00:00Z")
-        );
+    private Model<Booking> bookingModel;
+    private Model<EventType> eventTypeModel;
+    private Model<Slot> slotModel;
+    private Model<User> userModel;
+
+    @Autowired(required = false)
+    private Faker faker;
+
+    public ModelGenerator() {
+        init();
     }
 
-    public EventType createEventTypeModel() {
-        return new EventType(
-            UUID.fromString("5e2cb43b-a9e0-4dda-a09f-040f11366549"),
-            "Intro Call",
-            "A short introduction call",
-            30
-        );
+    @PostConstruct
+    private void init() {
+        if (faker == null) {
+            faker = new Faker();
+        }
+
+        eventTypeModel = Instancio.of(EventType.class)
+            .supply(Select.field(EventType::getId), UUID::randomUUID)
+            .supply(Select.field(EventType::getName), () -> faker.lorem().word())
+            .supply(Select.field(EventType::getDescription), () -> faker.lorem().sentence())
+            .supply(Select.field(EventType::getDurationMinutes), () -> faker.number().numberBetween(5, 481))
+            .toModel();
+
+        bookingModel = Instancio.of(Booking.class)
+            .supply(Select.field(Booking::getId), UUID::randomUUID)
+            .supply(Select.field(Booking::getEventTypeId), () -> Instancio.of(getEventTypeModel()).create().getId())
+            .supply(Select.field(Booking::getGuestName), () -> faker.name().firstName())
+            .supply(Select.field(Booking::getGuestEmail), () -> faker.internet().emailAddress())
+            .supply(Select.field(Booking::getStartTime), () -> Instant.now().plusSeconds(3600))
+            .supply(Select.field(Booking::getEndTime), () -> Instant.now().plusSeconds(5400))
+            .supply(Select.field(Booking::getCreatedAt), () -> Instant.now())
+            .toModel();
+
+        slotModel = Instancio.of(Slot.class)
+            .supply(Select.field(Slot::getStartTime), () -> Instant.now().plusSeconds(3600))
+            .supply(Select.field(Slot::getEndTime), () -> Instant.now().plusSeconds(5400))
+            .supply(Select.field(Slot::isAvailable), () -> true)
+            .toModel();
+
+        userModel = Instancio.of(User.class)
+            .supply(Select.field(User::getId), () -> UUID.randomUUID().toString())
+            .supply(Select.field(User::getName), () -> faker.name().fullName())
+            .supply(Select.field(User::getEmail), () -> faker.internet().emailAddress())
+            .toModel();
     }
 
-    public BookingDTO createBookingDTO() {
-        var booking = createBookingModel();
-
-        return new BookingDTO(
-            booking.getId(),
-            booking.getEventTypeId(),
-            booking.getGuestName(),
-            booking.getGuestEmail(),
-            booking.getStartTime(),
-            booking.getEndTime(),
-            booking.getCreatedAt()
-        );
-    }
-
-    public EventTypeDTO createEventTypeDTO() {
-        var eventType = createEventTypeModel();
-
-        return new EventTypeDTO(
-            eventType.getId(),
-            eventType.getName(),
-            eventType.getDescription(),
-            eventType.getDurationMinutes()
-        );
-    }
-
-    public SlotDTO createSlotDTO() {
-        return new SlotDTO(
-            Instant.parse("2026-05-27T09:00:00Z"),
-            Instant.parse("2026-05-27T09:30:00Z"),
-            true
-        );
-    }
-
-    public BookingCreateDTO createBookingCreateDTO() {
-        var eventType = createEventTypeModel();
-
-        return new BookingCreateDTO(
-            eventType.getId(),
-            "Alice",
-            "alice@example.com",
-            Instant.parse("2026-05-27T09:00:00Z")
-        );
-    }
-
-    public BookingCreateDTO createConflictingBookingCreateDTO() {
-        var eventType = createEventTypeModel();
-
-        return new BookingCreateDTO(
-            eventType.getId(),
-            "Bob",
-            "bob@example.com",
-            Instant.parse("2026-05-27T09:00:00Z")
-        );
-    }
-
-    public EventTypeCreateDTO createEventTypeCreateDTO() {
-        return new EventTypeCreateDTO(
-            "Intro Call",
-            "A short introduction call",
-            30
-        );
-    }
-
-    public UserDTO createCalendarOwnerDTO() {
-        return new UserDTO(
-            "2a5ef4ce-becf-4e27-b212-833b77f6116d",
-            "Calendar Owner",
-            "owner@example.com"
-        );
-    }
 }

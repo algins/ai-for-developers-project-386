@@ -21,6 +21,9 @@ dependencies {
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'org.instancio:instancio-junit:5.5.1'
+    testImplementation 'net.datafaker:datafaker:2.4.2'
+    testImplementation 'net.javacrumbs.json-unit:json-unit-assertj:2.38.0'
     testImplementation 'org.projectlombok:lombok:1.18.34'
     testCompileOnly 'org.mapstruct:mapstruct:1.5.5.Final'
     testAnnotationProcessor 'org.projectlombok:lombok:1.18.34'
