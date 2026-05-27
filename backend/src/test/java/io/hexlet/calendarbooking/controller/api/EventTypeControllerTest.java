@@ -45,6 +45,7 @@ class EventTypeControllerTest {
     @Test
     void testIndex() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
+
         var eventType = new EventTypeDTO(
             eventTypeModel.getId(),
             eventTypeModel.getName(),
@@ -52,7 +53,8 @@ class EventTypeControllerTest {
             eventTypeModel.getDurationMinutes()
         );
 
-        when(eventTypeService.listEventTypes()).thenReturn(List.of(eventType));
+        when(eventTypeService.listEventTypes())
+            .thenReturn(List.of(eventType));
 
         var request = get("/event-types");
 
@@ -72,11 +74,13 @@ class EventTypeControllerTest {
     @Test
     void testCreate() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
+
         var data = new EventTypeCreateDTO(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
             eventTypeModel.getDurationMinutes()
         );
+
         var createdEventType = new EventTypeDTO(
             eventTypeModel.getId(),
             eventTypeModel.getName(),
@@ -127,6 +131,7 @@ class EventTypeControllerTest {
     @Test
     void testCreateWithNotFound() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
+
         var data = new EventTypeCreateDTO(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
@@ -152,6 +157,7 @@ class EventTypeControllerTest {
     @Test
     void testCreateWithConflict() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
+        
         var data = new EventTypeCreateDTO(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),

@@ -36,13 +36,15 @@ class SlotControllerTest {
     @Test
     void testIndex() throws Exception {
         var slotModel = Instancio.of(MODEL_GENERATOR.getSlotModel()).create();
+
         var slot = new SlotDTO(
             slotModel.getStartTime(),
             slotModel.getEndTime(),
             slotModel.isAvailable()
         );
 
-        when(slotService.listAvailableSlots()).thenReturn(List.of(slot));
+        when(slotService.listAvailableSlots())
+            .thenReturn(List.of(slot));
 
         var request = get("/slots");
 
