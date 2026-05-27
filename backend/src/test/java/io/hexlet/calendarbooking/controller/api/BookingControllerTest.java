@@ -164,7 +164,7 @@ class BookingControllerTest {
     @Test
     void testCreateConflict() throws Exception {
         var bookingModel = Instancio.of(MODEL_GENERATOR.getBookingModel()).create();
-        
+
         var data = new BookingCreateDto(
             bookingModel.getEventTypeId(),
             bookingModel.getGuestName(),

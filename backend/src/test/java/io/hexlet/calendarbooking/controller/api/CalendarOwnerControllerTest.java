@@ -34,7 +34,7 @@ class CalendarOwnerControllerTest {
     @Test
     void testShow() throws Exception {
         var ownerModel = Instancio.of(MODEL_GENERATOR.getUserModel()).create();
-        
+
         var owner = new UserDto(
             ownerModel.getId(),
             ownerModel.getName(),

@@ -157,7 +157,7 @@ class EventTypeControllerTest {
     @Test
     void testCreateWithConflict() throws Exception {
         var eventTypeModel = Instancio.of(MODEL_GENERATOR.getEventTypeModel()).create();
-        
+
         var data = new EventTypeCreateDto(
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
