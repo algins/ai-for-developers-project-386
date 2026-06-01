@@ -50,7 +50,9 @@ class EventTypeControllerTest {
             eventTypeModel.getId(),
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
-            eventTypeModel.getDurationMinutes()
+            eventTypeModel.getDurationMinutes(),
+            0,
+            null
         );
 
         when(eventTypeService.listEventTypes())
@@ -85,7 +87,9 @@ class EventTypeControllerTest {
             eventTypeModel.getId(),
             eventTypeModel.getName(),
             eventTypeModel.getDescription(),
-            eventTypeModel.getDurationMinutes()
+            eventTypeModel.getDurationMinutes(),
+            0,
+            null
         );
 
         when(eventTypeService.createEventType(any(EventTypeCreateDto.class)))

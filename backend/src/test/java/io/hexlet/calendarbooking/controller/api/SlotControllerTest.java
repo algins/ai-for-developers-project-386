@@ -43,7 +43,7 @@ class SlotControllerTest {
             slotModel.isAvailable()
         );
 
-        when(slotService.listAvailableSlots())
+        when(slotService.listAvailableSlots(30))
             .thenReturn(List.of(slot));
 
         var request = get("/slots");
@@ -62,7 +62,7 @@ class SlotControllerTest {
 
     @Test
     void testIndexWithBadRequest() throws Exception {
-        when(slotService.listAvailableSlots())
+        when(slotService.listAvailableSlots(30))
             .thenThrow(new BadRequestException("Invalid time range"));
 
         var request = get("/slots");
@@ -78,7 +78,7 @@ class SlotControllerTest {
 
     @Test
     void testIndexWithNotFound() throws Exception {
-        when(slotService.listAvailableSlots())
+        when(slotService.listAvailableSlots(30))
             .thenThrow(new NotFoundException("Owner not found"));
 
         var request = get("/slots");
@@ -94,7 +94,7 @@ class SlotControllerTest {
 
     @Test
     void testIndexWithConflict() throws Exception {
-        when(slotService.listAvailableSlots())
+        when(slotService.listAvailableSlots(30))
             .thenThrow(new ConflictException("Slots generation conflict"));
 
         var request = get("/slots");

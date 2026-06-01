@@ -11,8 +11,8 @@ import io.hexlet.calendarbooking.repository.UserRepository;
 public class InMemoryUserRepository implements UserRepository {
     private final User calendarOwner = new User(
         "2a5ef4ce-becf-4e27-b212-833b77f6116d",
-        "Calendar Owner",
-        "owner@example.com"
+        "John Doe",
+        "john.doe@example.com"
     );
 
     @Override

@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.stereotype.Repository;
 
@@ -45,6 +46,15 @@ public class InMemoryBookingRepository implements BookingRepository {
                 }
             }
             return false;
+        }
+    }
+
+    @Override
+    public long countByEventTypeId(UUID eventTypeId) {
+        synchronized (lock) {
+            return bookings.stream()
+                .filter(booking -> booking.getEventTypeId().equals(eventTypeId))
+                .count();
         }
     }
 }

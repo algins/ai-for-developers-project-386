@@ -23,7 +23,7 @@ import io.hexlet.calendarbooking.repository.EventTypeRepository;
 @Service
 public class BookingService {
     private static final LocalTime WORK_DAY_START = LocalTime.of(9, 0);
-    private static final LocalTime WORK_DAY_END = LocalTime.of(17, 0);
+    private static final LocalTime WORK_DAY_END = LocalTime.of(18, 0);
     private static final long BOOKING_WINDOW_DAYS = 14;
 
     @Autowired

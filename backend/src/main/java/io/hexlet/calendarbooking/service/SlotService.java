@@ -29,11 +29,11 @@ public class SlotService {
     @Autowired
     private SlotMapper slotMapper;
 
-    public List<SlotDto> listAvailableSlots() {
+    public List<SlotDto> listAvailableSlots(int slotDurationMinutes) {
         var now = Instant.now(clock).truncatedTo(ChronoUnit.MINUTES);
         var windowEnd = now.plus(BOOKING_WINDOW_DAYS, ChronoUnit.DAYS);
 
-        var availableSlots = slotRepository.findAvailable(now, windowEnd).stream()
+        var availableSlots = slotRepository.findAvailable(now, windowEnd, slotDurationMinutes).stream()
             .filter(slot -> !bookingRepository.hasOverlap(slot.getStartTime(), slot.getEndTime()))
             .map(slotMapper::map)
             .toList();

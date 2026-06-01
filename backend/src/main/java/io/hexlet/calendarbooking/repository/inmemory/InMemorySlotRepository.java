@@ -16,11 +16,11 @@ import io.hexlet.calendarbooking.repository.SlotRepository;
 @Repository
 public class InMemorySlotRepository implements SlotRepository {
     private static final LocalTime WORK_DAY_START = LocalTime.of(9, 0);
-    private static final LocalTime WORK_DAY_END = LocalTime.of(17, 0);
-    private static final Duration SLOT_DURATION = Duration.ofMinutes(30);
+    private static final LocalTime WORK_DAY_END = LocalTime.of(18, 0);
 
     @Override
-    public List<Slot> findAvailable(Instant fromInclusive, Instant toExclusive) {
+    public List<Slot> findAvailable(Instant fromInclusive, Instant toExclusive, int slotDurationMinutes) {
+        var slotDuration = Duration.ofMinutes(slotDurationMinutes);
         var availableSlots = new ArrayList<Slot>();
 
         var firstDay = fromInclusive.atZone(ZoneOffset.UTC).toLocalDate();
@@ -32,14 +32,14 @@ public class InMemorySlotRepository implements SlotRepository {
 
             for (
                 var slotStart = workdayStart;
-                !slotStart.plus(SLOT_DURATION).isAfter(workdayEnd);
-                slotStart = slotStart.plus(SLOT_DURATION)
+                !slotStart.plus(slotDuration).isAfter(workdayEnd);
+                slotStart = slotStart.plus(slotDuration)
             ) {
                 if (slotStart.isBefore(fromInclusive) || !slotStart.isBefore(toExclusive)) {
                     continue;
                 }
 
-                var slotEnd = slotStart.plus(SLOT_DURATION);
+                var slotEnd = slotStart.plus(slotDuration);
 
                 if (slotEnd.isAfter(toExclusive)) {
                     continue;
