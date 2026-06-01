@@ -26,6 +26,9 @@ model EventType {
   @minValue(5)
   @maxValue(480)
   durationMinutes: int32;
+  @minValue(0)
+  bookingCount: int32;
+  nextAvailableSlot?: utcDateTime;
 }
 
 model Slot {
@@ -47,18 +50,6 @@ model Booking {
   startTime: utcDateTime;
   endTime: utcDateTime;
   createdAt: utcDateTime;
-}
-
-model EventTypeList {
-  items: EventType[];
-}
-
-model SlotList {
-  items: Slot[];
-}
-
-model BookingList {
-  items: Booking[];
 }
 
 model CreateEventTypeRequest {
@@ -126,7 +117,7 @@ model CreatedBookingResponse {
 @tag("Admin")
 interface AdminApi {
   @doc("Get the predefined owner profile used in the admin application.")
-  @route("/owner/profile")
+  @route("/calendar-owner")
   @get
   getOwnerProfile(): OwnerProfile | ServiceError;
 
@@ -138,7 +129,7 @@ interface AdminApi {
   @doc("Get upcoming bookings across all event types for the owner.")
   @route("/bookings")
   @get
-  listUpcomingBookings(): BookingList | ServiceError;
+  listUpcomingBookings(): Booking[] | ServiceError;
 }
 
 @tag("Public")
@@ -146,12 +137,12 @@ interface PublicApi {
   @doc("List public event types available for booking.")
   @route("/event-types")
   @get
-  listEventTypes(): EventTypeList | ServiceError;
+  listEventTypes(): EventType[] | ServiceError;
 
   @doc("Get owner's available slots in the next 14 days from now. Returned slots are only free slots.")
   @route("/slots")
   @get
-  listAvailableSlots(): SlotList | ServiceError;
+  listAvailableSlots(@query durationMinutes?: int32): Slot[] | ServiceError;
 
   @doc("Create a booking on a free slot in the 14-day booking window. A slot cannot be booked twice, even for different event types.")
   @route("/bookings")
