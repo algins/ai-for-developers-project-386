@@ -1,4 +1,5 @@
 import axios, { AxiosError } from 'axios'
+import i18next from 'i18next'
 
 import { env } from '@/config/env'
 import type { ApiErrorPayload } from '@/types/api'
@@ -16,7 +17,7 @@ apiClient.interceptors.response.use(
   (error: AxiosError<ApiErrorPayload>) => {
     const status = error.response?.status ?? 500
     const payload = error.response?.data
-    const message = payload?.message ?? error.message ?? 'Unexpected API error'
+    const message = payload?.message ?? error.message ?? i18next.t('common.unexpectedApiError')
     throw new ApiError(message, status, payload?.code)
   },
 )

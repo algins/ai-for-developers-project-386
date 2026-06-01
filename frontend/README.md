@@ -41,7 +41,7 @@ Public:
 
 Admin:
 
-- `GET /owner/profile`
+- `GET /calendar-owner`
 - `POST /event-types`
 - `GET /bookings`
 

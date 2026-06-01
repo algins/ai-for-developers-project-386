@@ -1,3 +1,4 @@
+import { CheckCircle2 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { useLocation, useParams } from 'react-router-dom'
 
@@ -20,7 +21,10 @@ export function BookingConfirmationPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>{t('public.bookingConfirmation.title')}</CardTitle>
+        <CardTitle className="flex items-center gap-2">
+          <CheckCircle2 className="h-5 w-5 text-muted-foreground" />
+          {t('public.bookingConfirmation.title')}
+        </CardTitle>
         <CardDescription>
           {t('public.bookingConfirmation.bookingIdLabel')} <span className="font-mono">{bookingId}</span>
         </CardDescription>

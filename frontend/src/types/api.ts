@@ -2,11 +2,11 @@ import type { components } from '@/types/api.generated'
 
 export type OwnerProfile = components['schemas']['OwnerProfile']
 export type EventType = components['schemas']['EventType']
-export type EventTypeList = components['schemas']['EventTypeList']
+export type EventTypeList = { items: EventType[] }
 export type Slot = components['schemas']['Slot']
-export type SlotList = components['schemas']['SlotList']
+export type SlotList = { items: Slot[] }
 export type Booking = components['schemas']['Booking']
-export type BookingList = components['schemas']['BookingList']
+export type BookingList = { items: Booking[] }
 export type CreateEventTypeRequest = components['schemas']['CreateEventTypeRequest']
 export type CreateBookingRequest = components['schemas']['CreateBookingRequest']
 export type ApiErrorPayload =

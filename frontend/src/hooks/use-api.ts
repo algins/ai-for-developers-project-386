@@ -17,10 +17,10 @@ export function usePublicEventTypes() {
   })
 }
 
-export function usePublicSlots() {
+export function usePublicSlots(durationMinutes: number) {
   return useQuery({
-    queryKey: queryKeys.publicSlots,
-    queryFn: publicApi.listSlots,
+    queryKey: [...queryKeys.publicSlots, durationMinutes],
+    queryFn: () => publicApi.listSlots(durationMinutes),
   })
 }
 

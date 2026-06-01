@@ -1,106 +1,98 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import type { TFunction } from 'i18next'
-import { useForm } from 'react-hook-form'
+import { Plus } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
-import { toast } from 'sonner'
-import { z } from 'zod'
+import { useNavigate } from 'react-router-dom'
 
+import { QueryState } from '@/components/feedback/query-state'
+import { BookingsPageSkeleton } from '@/components/feedback/skeletons'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
-import { useCreateEventType } from '@/hooks/use-api'
-
-function createEventTypeSchema(t: TFunction) {
-  return z.object({
-    name: z
-      .string()
-      .min(1, t('admin.eventTypes.validation.nameRequired'))
-      .max(100, t('admin.eventTypes.validation.nameMax', { max: 100 })),
-    description: z.string().max(1000, t('admin.eventTypes.validation.descriptionMax', { max: 1000 })),
-    durationMinutes: z
-      .number()
-      .int()
-      .min(5, t('admin.eventTypes.validation.durationMin', { min: 5 }))
-      .max(480, t('admin.eventTypes.validation.durationMax', { max: 480 })),
-  })
-}
-
-type EventTypeFormData = z.infer<ReturnType<typeof createEventTypeSchema>>
+import { Card, CardContent } from '@/components/ui/card'
+import {
+    Table,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from '@/components/ui/table'
+import { usePublicEventTypes } from '@/hooks/use-api'
 
 export function AdminEventTypesPage() {
   const { t } = useTranslation()
-  const eventTypeSchema = createEventTypeSchema(t)
-  const createEventType = useCreateEventType()
-  const form = useForm<EventTypeFormData>({
-    resolver: zodResolver(eventTypeSchema),
-    defaultValues: {
-      name: '',
-      description: '',
-      durationMinutes: 30,
-    },
-  })
-
-  const onSubmit = form.handleSubmit(async (values) => {
-    try {
-      const result = await createEventType.mutateAsync(values)
-      toast.success(t('admin.eventTypes.toasts.created', { name: result.name }))
-      form.reset({ name: '', description: '', durationMinutes: 30 })
-    } catch (error) {
-      const message = error instanceof Error ? error.message : t('admin.eventTypes.toasts.createFailed')
-      toast.error(message)
-    }
-  })
+  const navigate = useNavigate()
+  const { data, isLoading, error } = usePublicEventTypes()
+  const items = data?.items ?? []
 
   return (
-    <section className="space-y-4">
-      <div>
-        <h2 className="text-2xl font-semibold">{t('admin.eventTypes.heading')}</h2>
-        <p className="text-muted-foreground">{t('admin.eventTypes.description')}</p>
+    <section className="space-y-6">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-2xl font-semibold tracking-tight">{t('nav.adminEventTypes')}</h2>
+          <p className="mt-1.5 text-sm text-muted-foreground">{t('admin.eventTypes.description')}</p>
+        </div>
+        <Button
+          className="cursor-pointer px-4"
+          onClick={() => navigate('/admin/event-types/create')}
+          size="lg"
+          type="button"
+          variant="outline"
+        >
+          <Plus className="size-4" />
+          {t('admin.eventTypes.actions.create')}
+        </Button>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>{t('admin.eventTypes.cardTitle')}</CardTitle>
-          <CardDescription>{t('admin.eventTypes.cardDescription')}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <form className="space-y-4" onSubmit={onSubmit}>
-            <div className="grid gap-2">
-              <Label htmlFor="name">{t('admin.eventTypes.labels.name')}</Label>
-              <Input id="name" {...form.register('name')} />
-              {form.formState.errors.name && <p className="text-sm text-destructive">{form.formState.errors.name.message}</p>}
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="description">{t('admin.eventTypes.labels.description')}</Label>
-              <Textarea id="description" {...form.register('description')} />
-              {form.formState.errors.description && (
-                <p className="text-sm text-destructive">{form.formState.errors.description.message}</p>
-              )}
-            </div>
-
-            <div className="grid gap-2">
-              <Label htmlFor="durationMinutes">{t('admin.eventTypes.labels.durationMinutes')}</Label>
-              <Input
-                id="durationMinutes"
-                type="number"
-                min={5}
-                max={480}
-                {...form.register('durationMinutes', { valueAsNumber: true })}
-              />
-              {form.formState.errors.durationMinutes && (
-                <p className="text-sm text-destructive">{form.formState.errors.durationMinutes.message}</p>
-              )}
-            </div>
-
-            <Button disabled={createEventType.isPending} type="submit">
-              {createEventType.isPending ? t('admin.eventTypes.actions.creating') : t('admin.eventTypes.actions.create')}
-            </Button>
-          </form>
-        </CardContent>
-      </Card>
+      <QueryState
+        isLoading={isLoading}
+        error={(error as Error) ?? null}
+        loadingFallback={<BookingsPageSkeleton />}
+      >
+        <Card className="py-0">
+          <CardContent className="p-0">
+            <Table>
+              <TableHeader className="bg-muted/40">
+                <TableRow className="hover:bg-transparent">
+                  <TableHead className="h-11 px-4 text-sm font-semibold text-foreground/90">
+                    {t('admin.eventTypes.columns.name')}
+                  </TableHead>
+                  <TableHead className="h-11 px-4 text-sm font-semibold text-foreground/90">
+                    {t('admin.eventTypes.columns.duration')}
+                  </TableHead>
+                  <TableHead className="h-11 px-4 text-sm font-semibold text-foreground/90">
+                    {t('admin.eventTypes.columns.description')}
+                  </TableHead>
+                  <TableHead className="h-11 px-4 text-sm font-semibold text-foreground/90">
+                    {t('admin.eventTypes.columns.bookings')}
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {items.length === 0 ? (
+                  <TableRow>
+                    <TableCell className="px-4 py-3.5 text-center text-muted-foreground" colSpan={4}>
+                      {t('common.noRecordsFound')}
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  items.map((item) => (
+                    <TableRow className="hover:bg-muted/30" key={item.id}>
+                      <TableCell className="px-4 py-3.5 font-medium">{item.name}</TableCell>
+                      <TableCell className="px-4 py-3.5 text-muted-foreground">
+                        {t('admin.eventTypes.values.durationMinutes', { minutes: item.durationMinutes })}
+                      </TableCell>
+                      <TableCell className="px-4 py-3.5 text-muted-foreground">
+                        {item.description || t('common.dash')}
+                      </TableCell>
+                      <TableCell className="px-4 py-3.5 text-muted-foreground">
+                        {item.bookingCount}
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </CardContent>
+        </Card>
+      </QueryState>
     </section>
   )
 }

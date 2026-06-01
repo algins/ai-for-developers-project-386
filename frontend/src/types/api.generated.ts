@@ -22,6 +22,23 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/calendar-owner": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** @description Get the predefined owner profile used in the admin application. */
+        get: operations["AdminApi_getOwnerProfile"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/event-types": {
         parameters: {
             query?: never;
@@ -34,23 +51,6 @@ export interface paths {
         put?: never;
         /** @description Create a new event type for the predefined calendar owner. */
         post: operations["AdminApi_createEventType"];
-        delete?: never;
-        options?: never;
-        head?: never;
-        patch?: never;
-        trace?: never;
-    };
-    "/owner/profile": {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        /** @description Get the predefined owner profile used in the admin application. */
-        get: operations["AdminApi_getOwnerProfile"];
-        put?: never;
-        post?: never;
         delete?: never;
         options?: never;
         head?: never;
@@ -96,9 +96,6 @@ export interface components {
             /** Format: date-time */
             createdAt: string;
         };
-        BookingList: {
-            items: components["schemas"]["Booking"][];
-        };
         ConflictError: {
             /** @enum {string} */
             code: "CONFLICT";
@@ -124,9 +121,10 @@ export interface components {
             description: string;
             /** Format: int32 */
             durationMinutes: number;
-        };
-        EventTypeList: {
-            items: components["schemas"]["EventType"][];
+            /** Format: int32 */
+            bookingCount: number;
+            /** Format: date-time */
+            nextAvailableSlot?: string;
         };
         NotFoundError: {
             /** @enum {string} */
@@ -145,9 +143,6 @@ export interface components {
             /** Format: date-time */
             endTime: string;
             isAvailable: boolean;
-        };
-        SlotList: {
-            items: components["schemas"]["Slot"][];
         };
     };
     responses: never;
@@ -173,7 +168,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["BookingList"];
+                    "application/json": components["schemas"]["Booking"][];
                 };
             };
             /** @description The server could not understand the request due to invalid syntax. */
@@ -256,6 +251,53 @@ export interface operations {
             };
         };
     };
+    AdminApi_getOwnerProfile: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description The request has succeeded. */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OwnerProfile"];
+                };
+            };
+            /** @description The server could not understand the request due to invalid syntax. */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["BadRequestError"];
+                };
+            };
+            /** @description The server cannot find the requested resource. */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["NotFoundError"];
+                };
+            };
+            /** @description The request conflicts with the current state of the server. */
+            409: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ConflictError"];
+                };
+            };
+        };
+    };
     PublicApi_listEventTypes: {
         parameters: {
             query?: never;
@@ -271,7 +313,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["EventTypeList"];
+                    "application/json": components["schemas"]["EventType"][];
                 };
             };
             /** @description The server could not understand the request due to invalid syntax. */
@@ -354,56 +396,11 @@ export interface operations {
             };
         };
     };
-    AdminApi_getOwnerProfile: {
-        parameters: {
-            query?: never;
-            header?: never;
-            path?: never;
-            cookie?: never;
-        };
-        requestBody?: never;
-        responses: {
-            /** @description The request has succeeded. */
-            200: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["OwnerProfile"];
-                };
-            };
-            /** @description The server could not understand the request due to invalid syntax. */
-            400: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["BadRequestError"];
-                };
-            };
-            /** @description The server cannot find the requested resource. */
-            404: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["NotFoundError"];
-                };
-            };
-            /** @description The request conflicts with the current state of the server. */
-            409: {
-                headers: {
-                    [name: string]: unknown;
-                };
-                content: {
-                    "application/json": components["schemas"]["ConflictError"];
-                };
-            };
-        };
-    };
     PublicApi_listAvailableSlots: {
         parameters: {
-            query?: never;
+            query?: {
+                durationMinutes?: number;
+            };
             header?: never;
             path?: never;
             cookie?: never;
@@ -416,7 +413,7 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content: {
-                    "application/json": components["schemas"]["SlotList"];
+                    "application/json": components["schemas"]["Slot"][];
                 };
             };
             /** @description The server could not understand the request due to invalid syntax. */

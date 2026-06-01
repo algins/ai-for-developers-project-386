@@ -1,5 +1,5 @@
 import { AlertCircle } from 'lucide-react'
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -10,6 +10,7 @@ interface QueryStateProps extends PropsWithChildren {
   error: Error | null
   emptyText?: string
   isEmpty?: boolean
+  loadingFallback?: ReactNode
 }
 
 export function QueryState({
@@ -17,12 +18,16 @@ export function QueryState({
   error,
   isEmpty = false,
   emptyText,
+  loadingFallback,
   children,
 }: QueryStateProps) {
   const { t } = useTranslation()
   const resolvedEmptyText = emptyText ?? t('common.noDataYet')
 
   if (isLoading) {
+    if (loadingFallback) {
+      return <>{loadingFallback}</>
+    }
     return (
       <div className="space-y-3">
         <Skeleton className="h-24 w-full" />
