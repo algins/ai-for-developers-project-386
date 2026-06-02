@@ -187,3 +187,31 @@ make backend-build
 ```
 
 Generated OpenAPI files are written to `tsp-output/schema/`.
+
+## Docker
+
+The repository uses a single `Dockerfile` that builds frontend and backend, then runs one Spring Boot container.
+
+Build image from the repository root:
+
+```bash
+docker build -t calendar-booking-app .
+```
+
+Run container and pass port through `PORT` environment variable:
+
+```bash
+docker run --rm -e PORT=4010 -p 4010:4010 calendar-booking-app
+```
+
+When the container starts:
+
+- Spring Boot starts automatically and listens on `PORT`
+- frontend static files are served by the same app on `/`
+- API is available on the same host/port (same-origin)
+
+## Deployment
+
+Public application URL (Render):
+
+- Add your deployed URL here, for example: `https://ai-for-developers-project-386-y7qa.onrender.com`
