@@ -13,7 +13,7 @@ const en = {
   },
   common: {
     requestFailed: 'Request failed',
-    emptyState: 'Empty state',
+    emptyState: 'Nothing here yet',
     noDataYet: 'No data yet.',
     noRecordsFound: 'No records found.',
     unknown: 'Unknown',
@@ -135,7 +135,7 @@ const en = {
     home: {
       heading: 'Book now',
       description: 'Click a card to open the calendar and pick an available slot.',
-      empty: 'No event types are available yet.',
+      empty: 'No event types are available right now. Please check back later.',
       openSlots: 'Open calendar',
       minutesUnit: 'min',
       durationBadge: '{{minutes}} min',
