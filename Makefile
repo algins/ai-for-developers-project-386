@@ -17,6 +17,9 @@ frontend-types:
 frontend-build:
 	cd frontend && npm run build
 
+frontend-e2e:
+	cd frontend && npm run e2e
+
 frontend-lint:
 	cd frontend && npm run lint
 

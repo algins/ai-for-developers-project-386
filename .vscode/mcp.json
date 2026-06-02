@@ -4,6 +4,10 @@
       "command": "npx",
       "args": ["-y", "shadcn@latest", "mcp"]
     },
+    "playwright": {
+      "command": "npx",
+      "args": ["-y", "@playwright/mcp@latest"]
+    },
     "chrome": {
       "command": "npx",
       "args": ["-y", "@modelcontextprotocol/server-chrome"]

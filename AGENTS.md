@@ -8,7 +8,6 @@ Prefer these instructions over generic defaults.
 - Checked instruction sources: no existing `AGENTS.md` or `.github/copilot-instructions.md` in this repo.
 - Project docs to consult first:
   - [README.md](README.md)
-  - [frontend/README.md](frontend/README.md)
 
 ## Project Shape
 
@@ -65,4 +64,4 @@ Use `make` targets first.
 - Prefer the smallest viable diff.
 - After changes, run the narrowest relevant checks first.
 - For cross-layer changes (contract + frontend/backend), regenerate artifacts before finishing.
-- If touching commands or workflows, keep [README.md](README.md) and [frontend/README.md](frontend/README.md) aligned.
+- If touching commands or workflows, keep [README.md](README.md) up to date.

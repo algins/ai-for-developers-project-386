@@ -135,6 +135,12 @@ make frontend-lint
 make frontend-typecheck
 ```
 
+Run frontend integration scenarios (Playwright):
+
+```bash
+make frontend-e2e
+```
+
 Run backend lint and tests:
 
 ```bash
