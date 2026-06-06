@@ -41,7 +41,7 @@ make backend-start
 
 3. Open the app in browser:
 
-- http://localhost:5173/
+- http://localhost:5174/
 
 ## Development Workflow
 
